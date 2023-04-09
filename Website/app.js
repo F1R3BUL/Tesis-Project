@@ -5,13 +5,7 @@ const fs = require('fs');
 const { SerialPort } = require('serialport')
 const { ReadlineParser } = require('@serialport/parser-readline')
 const { exec } = require('child_process');
-// Create a serial port object
-const port = new SerialPort({
-  path: 'COM4',
-  baudRate: 9600,
-})  
-// Set up the serial port
-const parser = port.pipe(new ReadlineParser({delimiter: '\r\n'}))
+
 
 // Set up the WebSocket server
 app.get('/', (req, res) => {
@@ -30,6 +24,7 @@ io.on('connection', (socket) => {
       if (username === "admin" && password === "admin") {          
         io.emit('loginSuccess');
       }
+      
     });
 
     socket.on('Index', (socket)=> {   
@@ -53,23 +48,43 @@ io.on('connection', (socket) => {
     });
 });
 
-parser.on('data', (data) => {
-  let output = data.toString().split(";");
-  let temperature = output[1];
-  if(temperature >=  30)
-  {
-    io.emit('ArduionoData', data.toString());
-    console.error(`shutting down`);
-    exec('shutdown /s /t 0', (error, stdout, stderr) => {
-      if (error) {
-        console.error(`Error executing command: ${error}`);
-        return;
+// Create a serial port object
+const port = new SerialPort({
+  path: 'COM3',
+  baudRate: 9600,
+  },(err => {
+    if(err)
+    {
+      console.log('No device on serial port.');
+      io.emit('SerialError');
+    }
+    else{
+      console.log('Device connected');
+    }
+  }));
+
+    const parser = port.pipe(new ReadlineParser({delimiter: '\r\n'}));
+
+
+    parser.on('data', (data) => {
+      let output = data.toString().split(";");
+      let temperature = output[1];
+      if(temperature >=  30)
+      {
+        io.emit('ArduionoData', data.toString());
+        console.error(`shutting down`);
+        exec('shutdown /s /t 0', (error, stdout, stderr) => {
+          if (error) {
+            console.error(`Error executing command: ${error}`);
+            return;
+          }
+        });
       }
+      io.emit('ArduionoData', data.toString());
+      data.split()
     });
-  }
-  io.emit('ArduionoData', data.toString());
-  data.split()
-});
+
+// Set up the serial port
 
 server.listen(3000, () => {
   console.log('Server listening on port http://localhost:3000');
