@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Page</title>
+</head>
+<body>
+    <form id="login-form">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username">
+        <br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password">
+        <br><br>
+        <button type="submit">Submit</button>
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+    const socket = io();
+
+      document.getElementById("login-form").addEventListener("submit", (event) => {
+          event.preventDefault();
+      
+          const username = document.getElementById("username").value;
+          const password = document.getElementById("password").value;
+      
+          socket.emit("login", { username, password });
+      });
+
+      socket.on("loginSuccess", () => {
+        window.location.href = "index.html";
+      });
+      </script>
+    <script src="login.js"></script>
+</body>
+</html>

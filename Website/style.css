@@ -1,0 +1,48 @@
+body {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  color: black;
+  background-color: darkgray;
+}
+
+/* Center the h1 element */
+h1 {
+  text-align: left;
+}
+
+.container{
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  width: 40%;
+  height: 20%;
+}
+/* Style the rows containing the temperature and humidity output */
+.row {
+  display: inline-flexbox;
+  /*align-items: center;*/
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+  margin-right: 10px;
+}
+
+/* Style the labels */
+.row label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+/* Style the temperature and humidity output */
+.row a {
+  color: white;
+}
+
+button{
+  background-color: purple;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 2px;
+  font-size: 12px;
+}
