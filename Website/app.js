@@ -5,6 +5,7 @@ const fs = require('fs');
 const { SerialPort } = require('serialport')
 const { ReadlineParser } = require('@serialport/parser-readline')
 const { exec } = require('child_process');
+const player = require('play-sound')();
 
 
 // Set up the WebSocket server
@@ -38,13 +39,15 @@ io.on('connection', (socket) => {
     });
 
     socket.on('shutdown', (socket) => {
-      console.log("Shudown recieved");
-      exec('shutdown /s /t 0', (error, stdout, stderr) => {
-        if (error) {
-          console.error(`Error executing command: ${error}`);
-          return;
-        }
-      })
+        player.play('./BEEEEEEEEEEEEP.mp3', (err) => {
+          if (err) console.log(`Could not play sound: ${err}`);
+        });
+      //exec('shutdown /s /t 0', (error, stdout, stderr) => {
+      //  if (error) {
+      //    console.error(`Error executing command: ${error}`);
+      //    return;
+      //  }
+      //})
     });
 });
 
@@ -69,10 +72,18 @@ const port = new SerialPort({
     parser.on('data', (data) => {
       let output = data.toString().split(";");
       let temperature = output[1];
-      if(temperature >=  30)
+      if (temperature >= 27 && temperature <= 29)
       {
         io.emit('ArduionoData', data.toString());
-        console.error(`shutting down`);
+        // Play audio file
+        player.play('BEEEEEEEEEEEEP.wav', (err) => {
+          if (err) {
+            console.error(`Failed to play audio: ${err}`);
+          }
+        });
+      }
+      else if(temperature >=  30)
+      {
         exec('shutdown /s /t 0', (error, stdout, stderr) => {
           if (error) {
             console.error(`Error executing command: ${error}`);
