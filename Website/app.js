@@ -5,25 +5,51 @@ const fs = require('fs');
 const { SerialPort } = require('serialport')
 const { ReadlineParser } = require('@serialport/parser-readline')
 const { exec } = require('child_process');
+const requestIp = require('request-ip');
 const player = require('play-sound')();
-
-
+const sessionStorage = require('node-sessionstorage');
+var LoggedIp = "";
+var NewIp = "";
 // Set up the WebSocket server
 app.get('/', (req, res) => {
+  NewIp = requestIp.getClientIp(req);
   res.sendFile(__dirname + '/login.html');
 });
 
 app.get('/index.html', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  let ip = requestIp.getClientIp(req);
+  NewIp = requestIp.getClientIp(req);
+  if(sessionStorage.getItem("ip").includes(ip))
+  {
+    console.log(LoggedIp + "asda" + NewIp);
+    LoggedIp = sessionStorage.setItem("ip", ip);
+    res.sendFile(__dirname + '/index.html');
+  }
+  else{
+    res.sendFile(__dirname + '/login.html');
+  }
+  
 });
 
 io.on('connection', (socket) => {
-    console.log('Client connected');
-
-    socket.on("login", ({ username, password }) => {
+      let ip = socket.request.connection.remoteAddress;
+      socket.on("login", ({ username, password }) => {
       // Perform login authentication
-      if (username === "admin" && password === "admin") {          
-        io.emit('loginSuccess');
+      if (username === "admin" && password === "admin") {
+        if(LoggedIp != "" && LoggedIp != NewIp)
+        {
+          console.log("Already logged in!");
+        }
+        else
+        {
+          if(ip == LoggedIp)
+          {
+            sessionStorage.setItem("ip", ip);
+            IsLoggedIp = ip;
+            console.log("succesfull login");
+            io.emit('loginSuccess');
+          }
+        }
       }
       
     });
@@ -48,6 +74,14 @@ io.on('connection', (socket) => {
       //    return;
       //  }
       //})
+    });
+
+    socket.on('disconnect', () => {
+      if()
+      {
+
+      }
+        LoggedIp = "";      
     });
 });
 

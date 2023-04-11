@@ -15,7 +15,9 @@
     "express": "^4.18.2",
     "fs": "^0.0.1-security",
     "mssql": "^9.1.1",
+    "node-sessionstorage": "^1.0.0",
     "play-sound": "^1.1.5",
+    "request-ip": "^3.3.0",
     "serialport": "^10.5.0",
     "socket.io": "^4.6.1",
     "sound-play": "^1.1.0"
