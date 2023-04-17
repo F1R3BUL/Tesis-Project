@@ -1,58 +1,65 @@
 const app = require("express")();
 const server = require("http").createServer(app);
+const ejs = require("ejs");
 const io = require("socket.io")(server);
 const fs = require('fs');
+const bodyParser = require('body-parser');
 const { SerialPort } = require('serialport')
 const { ReadlineParser } = require('@serialport/parser-readline')
 const { exec } = require('child_process');
 const requestIp = require('request-ip');
 const player = require('play-sound')();
 const sessionStorage = require('node-sessionstorage');
-var LoggedIp = "";
-var NewIp = "";
+var LoggedIp = {IP: '0.0.0.0', Logged: true};
 // Set up the WebSocket server
+app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({extended: true}));
+
 app.get('/', (req, res) => {
-  NewIp = requestIp.getClientIp(req);
-  res.sendFile(__dirname + '/login.html');
+  res.render(__dirname + '/login.ejs', {message: ""});
 });
 
-app.get('/index.html', (req, res) => {
+app.post('/Information', (req, res) => {
   let ip = requestIp.getClientIp(req);
-  NewIp = requestIp.getClientIp(req);
-  if(sessionStorage.getItem("ip").includes(ip))
+  if(sessionStorage.getItem("ip"))
   {
-    console.log(LoggedIp + "asda" + NewIp);
-    LoggedIp = sessionStorage.setItem("ip", ip);
-    res.sendFile(__dirname + '/index.html');
+    if(sessionStorage.getItem("ip") === ip)
+    {
+      res.sendFile(__dirname + '/index.html'); 
+    }
+  }
+  else if (req.body.username === "admin" && req.body.password === "admin") {
+        console.log(req.body);
+        LoggedIp = {IP : ip, Logged: true};
+        sessionStorage.setItem("ip", ip);
+        res.sendFile(__dirname + '/index.html'); 
+      }
+      else
+      {
+        res.render(__dirname + '/login.ejs', {message: "Wrong Password"});
+      }
+});
+
+app.get('/Information', (req, res) => {
+  let ip = requestIp.getClientIp(req);
+  if(LoggedIp.Logged === true)
+  {
+    if(LoggedIp.IP === ip)
+    {
+      res.sendFile(__dirname + '/index.html'); 
+    }
+    else
+    {
+      res.render(__dirname + '/login.ejs', {message: "Account is logged on a different device."});
+    }
   }
   else{
-    res.sendFile(__dirname + '/login.html');
+    res.render(__dirname + '/login.ejs', {message: ""});
   }
-  
 });
 
 io.on('connection', (socket) => {
       let ip = socket.request.connection.remoteAddress;
-      socket.on("login", ({ username, password }) => {
-      // Perform login authentication
-      if (username === "admin" && password === "admin") {
-        if(LoggedIp != "" && LoggedIp != NewIp)
-        {
-          console.log("Already logged in!");
-        }
-        else
-        {
-          if(ip == LoggedIp)
-          {
-            sessionStorage.setItem("ip", ip);
-            IsLoggedIp = ip;
-            console.log("succesfull login");
-            io.emit('loginSuccess');
-          }
-        }
-      }
-      
-    });
 
     socket.on('Index', (socket)=> {   
       fs.readFile('style.css', (err, data) => {
@@ -76,13 +83,6 @@ io.on('connection', (socket) => {
       //})
     });
 
-    socket.on('disconnect', () => {
-      if()
-      {
-
-      }
-        LoggedIp = "";      
-    });
 });
 
 // Create a serial port object
