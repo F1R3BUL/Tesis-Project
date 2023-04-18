@@ -1,1 +1,31 @@
-<h1>BLEH</h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/styles/index.css">
+    <title>Server Inspector</title>
+</head>
+<body>
+    <form action="/Login" method="post" autocapitalize="false">
+      <div class="label">
+      <% if (message) { %>
+        <b style="color:#e65555"><%= message %></b>
+      <% } %>
+      </div>
+
+      <div class="label">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="Enter your username">
+      </div>
+
+      <div class="label">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Enter your password">
+      </div>
+
+      <button type="submit"><b>Login</b></button>
+      <br/>
+      <small>Dont have an account? <a href="/Register">Make on here</a></small>
+
+    </form>
+</body>
+</html>
