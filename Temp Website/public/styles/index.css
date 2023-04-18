@@ -1,8 +1,8 @@
 body {
-    background-color: #6c9484;
+    background-color: #919191;
   }
   form {
-    background-color: #325346;
+    background-color: #4f4f4f;;
     width: 400px;
     height: 250px;
     display: grid;
@@ -35,7 +35,7 @@ body {
     box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.1);
   }
   button[type="submit"] {
-    background-color: #ffc4b3;
+    background-color: #c6aadd;
     color: #424242;;   
     padding: 10px;
     border: none;
@@ -44,5 +44,11 @@ body {
     box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.1);
   }
   button[type="submit"]:hover {
-    background-color: #da9c7b;
+    background-color:  #d3b4b4;
+  }
+  small{
+    color: white;
+  }
+  a{
+    color: white;
   }

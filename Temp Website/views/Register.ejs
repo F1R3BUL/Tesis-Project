@@ -5,7 +5,7 @@
     <title>Server Inspector</title>
 </head>
 <body>
-    <form action="/Register" method="post" autocapitalize="false">
+    <form action="/Register" method="post" autocapitalize="false" style="height: 340px;">
       <div class="label">
       <% if (message) { %>
         <b style="color:#e65555"><%= message %></b>
@@ -13,13 +13,18 @@
       </div>
 
       <div class="label">
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" placeholder="Enter your username">
+        <label for="regsiterUsername">Username</label>
+        <input type="text" id="regsiterUsername" name="regsiterUsername" placeholder="Enter your username">
       </div>
 
       <div class="label">
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" placeholder="Enter your password">
+      <label for="regsiterPassword">Password</label>
+      <input type="password" id="regsiterPassword" name="regsiterPassword" placeholder="Enter your password">
+      </div>
+
+      <div class="label">
+        <label for="confirmPassword">Confirm password</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password">
       </div>
 
       <button type="submit"><b>Register</b></button>

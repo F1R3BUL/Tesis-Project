@@ -46,6 +46,17 @@ async function ValidateLogin(Username, Password, IP)
     return result;
 }
 
+async function CheckIfIpActive(IP)
+{
+    let entity = await UserIP.findOne({where: {Ip: IP}});
+    if(entity)
+    {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 async function UpdateActiveUser(IP){
     await UserIP.update({IP: IP}, 
         {
@@ -83,5 +94,6 @@ module.exports = {
     ValidateLogin,
     ClearActiveUsers,
     CheckActiveUsers,
-    UpdateActiveUser
+    UpdateActiveUser,
+    CheckIfIpActive
 };
