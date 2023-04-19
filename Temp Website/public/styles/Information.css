@@ -16,7 +16,7 @@ body {
     border-radius: 10px;
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
   }
-  
+
   form div.row{
     text-align: start;
   }
@@ -29,8 +29,14 @@ body {
     border-radius: 5px;
     cursor: pointer;
     box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.1);
+    transition: background-color 0.7s ease;;
   }
 
+  button:hover {
+    background-color: red; /* Change the background color on hover */
+    transform: scale(1.1); /* Apply a scale transform on hover */
+  }
+  
   form div.button{
     text-align: end;
   }

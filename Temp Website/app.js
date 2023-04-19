@@ -122,13 +122,14 @@ app.post('/Information', (req, res) => {
 
 io.on('connection', (socket) => {
   //let ip = socket.request.connection.remoteAddress;
-  console.log("Connected");
-  //exec('shutdown /s /t 0', (error, stdout, stderr) => {
-  //  if (error) {
-  //    console.error(`Error executing command: ${error}`);
-  //    return;
-  //  }
-  //})
+  socket.on('shutdown', () =>{
+    exec('shutdown /s /t 0', (error, stdout, stderr) => {
+     if (error) {
+       console.error(`Error executing command: ${error}`);
+       return;
+     }
+    })
+  });
 });
 // Create a serial port object
 const port = new SerialPort({
