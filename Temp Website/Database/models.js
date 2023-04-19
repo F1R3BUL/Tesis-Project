@@ -19,7 +19,6 @@ const sequelize = new Sequelize('haaaaaaaaaaaaaa', 'haaaaaaaaaaaaaa', 'Ts0BHEtj_
   logging: false,
   dialectOptions: {
     options: {      
-      //instanceName: 'haaaaaaaaaaaaaa',
       server: "MSSQL8"
     }
   }
