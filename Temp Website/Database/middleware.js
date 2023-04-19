@@ -15,6 +15,11 @@ async function CheckConnection()
 
 }
 
+async function WaitConnection()
+{
+    await new Promise(resolve => setTimeout(resolve, 10000)); 
+}
+
 async function CreateUser(Username, Password)
 {
     let result = {Error: false , Message: ""};
@@ -80,6 +85,15 @@ async function UpdateActiveUser(IP){
         });
 }
 
+async function CreateRoomData(DecodedData){
+    let test = await Data.build({
+        Humidity: DecodedData['H'],
+        Temperature: DecodedData['T'],
+        Level: DecodedData['S']
+      });
+    await test.save();
+}
+
 async function ClearActiveUsers()
 {
     await UserIP.destroy({
@@ -110,5 +124,6 @@ module.exports = {
     CheckActiveUsers,
     UpdateActiveUser,
     CheckIfIpActive,
-    CheckConnection
+    CreateRoomData,
+    WaitConnection
 };

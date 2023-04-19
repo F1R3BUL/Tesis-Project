@@ -13,14 +13,14 @@ const { Sequelize, DataTypes, Op } = require('sequelize');
 //   }
 // });
 
-const sequelize = new Sequelize('arduinotowebsitetest_', 'arduinotowebsitetest_', 'ArduinoToWebsiteTest', {
+const sequelize = new Sequelize('haaaaaaaaaaaaaa', 'haaaaaaaaaaaaaa', 'Ts0BHEtj_~SF', {
   dialect: 'mssql',
-  host: 'sql.bsite.net',
+  host: 'den1.mssql8.gear.host',
   logging: false,
   dialectOptions: {
-    options: {
-      instanceName: 'MSSQL2016',
-       encrypt: false
+    options: {      
+      //instanceName: 'haaaaaaaaaaaaaa',
+      server: "MSSQL8"
     }
   }
 })
@@ -83,7 +83,7 @@ const Data = sequelize.define('RoomData', {
   }
 });
 
-sequelize.sync({ force: true });
+sequelize.sync({ force: false });
 
 module.exports = {
   sequelize,

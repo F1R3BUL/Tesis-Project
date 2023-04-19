@@ -11,7 +11,7 @@ const requestIp = require('request-ip');
 const PORT = 3000;
 const {CreateUser, ValidateLogin, ClearActiveUsers, 
   CheckActiveUsers, UpdateActiveUser, CheckIfIpActive,
-  CheckConnection } = require(__dirname + "/Database/middleware.js");
+  CreateRoomData, WaitConnection } = require(__dirname + "/Database/middleware.js");
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
@@ -132,7 +132,7 @@ io.on('connection', (socket) => {
 });
 // Create a serial port object
 const port = new SerialPort({
-path: 'COM4',
+path: 'COM3',
 baudRate: 9600,
 },(err => {
 if(err)
@@ -149,11 +149,17 @@ const parser = port.pipe(new ReadlineParser({delimiter: '\r\n'}));
 
 
 let lastReading = "";
+let count = 0;
 parser.on('data', async (data) => {
   let output = data.toString().split(",");
   let DecodedData = { };
   for(let i = 0; i < output.length; i++){
     DecodedData[output[i].split(':')[0].toString()] = output[i].split(':')[1].toString();
+  }
+  count++;
+  if(count > 4){
+    count = 0;
+    CreateRoomData(DecodedData);
   }
   console.log(DecodedData);
   if(lastReading === 'danger' && DecodedData['S'] === 'danger')
@@ -179,11 +185,15 @@ parser.on('data', async (data) => {
   io.emit('ArduionoData', DecodedData);
 });
 
-
-server.listen(PORT, () => 
+WaitConnection().then(() =>
 {
   ClearActiveUsers();
   CheckActiveUsers();
+});
+
+server.listen(PORT, () => 
+{
+    process.env.TZ = "Europe/Kiev";
     console.log("Server is listening. http://localhost:3000")
 });
 
