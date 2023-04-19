@@ -1,15 +1,29 @@
 const { Sequelize, DataTypes, Op } = require('sequelize');
 
-const sequelize = new Sequelize('ArduinoToNodeJsWebsite', 'NicolaJ_SQLLogin_1 ', 'mrubs9xwhz', {
-  host: 'ArduinoToNodeJsWebsite.mssql.somee.com',
+// const sequelize = new Sequelize('kurami_', 'kurami_ ', '', {
+//   host: 'sql.bsite.net/MSSQL2016',
+//   dialect: 'mssql',
+//   port: '',
+//   database: 'kurami_',
+//   logging: false,
+//   dialectOptions: {
+//     options: {
+//       encrypt: false // If you are connecting to a server with SSL encryption
+//     }
+//   }
+// });
+
+const sequelize = new Sequelize('arduinotowebsitetest_', 'arduinotowebsitetest_', 'ArduinoToWebsiteTest', {
   dialect: 'mssql',
+  host: 'sql.bsite.net',
   logging: false,
   dialectOptions: {
     options: {
-      encrypt: false // If you are connecting to a server with SSL encryption
+      instanceName: 'MSSQL2016',
+       encrypt: false
     }
   }
-});
+})
 
 const User = sequelize.define('Users', {
   UserId: {
@@ -69,7 +83,7 @@ const Data = sequelize.define('RoomData', {
   }
 });
 
-sequelize.sync({ force: false });
+sequelize.sync({ force: true });
 
 module.exports = {
   sequelize,

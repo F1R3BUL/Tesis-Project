@@ -10,14 +10,12 @@ const { exec } = require('child_process');
 const requestIp = require('request-ip');
 const PORT = 3000;
 const {CreateUser, ValidateLogin, ClearActiveUsers, 
-  CheckActiveUsers, UpdateActiveUser, CheckIfIpActive } = require(__dirname + "/Database/middleware.js");
+  CheckActiveUsers, UpdateActiveUser, CheckIfIpActive,
+  CheckConnection } = require(__dirname + "/Database/middleware.js");
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + '\\public'));
-
-ClearActiveUsers();
-CheckActiveUsers();
 
 app.post("/heartbeat", async (req, res) => {
   let ip = requestIp.getClientIp(req);
@@ -184,6 +182,8 @@ parser.on('data', async (data) => {
 
 server.listen(PORT, () => 
 {
+  ClearActiveUsers();
+  CheckActiveUsers();
     console.log("Server is listening. http://localhost:3000")
 });
 

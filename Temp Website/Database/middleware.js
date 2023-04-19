@@ -1,6 +1,20 @@
 const { Time, DateTime } = require('mssql');
 const { sequelize, User, UserIP, Data, Op} = require('./models');
 
+async function CheckConnection()
+{
+    try {
+        await sequelize.authenticate().then(() =>
+            {
+                return true;
+            }
+        );
+    } catch (error) {
+        return false;
+    }
+
+}
+
 async function CreateUser(Username, Password)
 {
     let result = {Error: false , Message: ""};
@@ -95,5 +109,6 @@ module.exports = {
     ClearActiveUsers,
     CheckActiveUsers,
     UpdateActiveUser,
-    CheckIfIpActive
+    CheckIfIpActive,
+    CheckConnection
 };
