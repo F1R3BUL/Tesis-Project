@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset=utf-8>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/styles/Information.css">
     <title>Server info</title>
     <script src="/RequestSocket"></script>
     <script >
@@ -38,7 +38,7 @@
   <body>
     <h2>Информация за сървърно помещение</h2>
 
-    <div class="container">      
+    <form class="table">      
       <div class="row">
         <label>Температура: </label>
         <a  id="TemperatureOutput"></a>
@@ -49,14 +49,15 @@
         <a  id="HumidityOutput"></a>
       </div> 
 
-      <div class="row">
+      <div class="row" style="border-bottom: 0">
         <label>Стабилност: </label>
         <a  id="LevelOutput"></a>
       </div> 
-  </div>
-      <div class="row">
-        <!-- <button onclick="StartShutdown()">Изключване</button> -->
+      <div class="button">
+        <button onclick="StartShutdown()">Изключване</button>
       </div>
+    </form>
+
   </body>
   <script>
 window.setInterval(function() {
