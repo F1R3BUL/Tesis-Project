@@ -89,7 +89,19 @@ app.get('/Information', (req, res) => {
   CheckIfIpActive(ip).then(result => {
     if(result)
     {
-      res.sendFile(__dirname + '/views/Information.html');
+      console.log('CHECK LOGIn');
+      let username = req.body.username;
+      let password = req.body.password;
+      ValidateLogin(username, password, ip).then(result =>{
+        if(result.Error)
+        {
+          res.render(__dirname + '/views/index.ejs', {message: result.Message});
+        } else {
+          console.log("Loged");
+          res.sendFile(__dirname + '/views/Information.html');
+        }
+        
+      });
     }
     else {
       res.render(__dirname + '/views/index.ejs', {message: ""});
@@ -133,7 +145,7 @@ io.on('connection', (socket) => {
 });
 // Create a serial port object
 const port = new SerialPort({
-path: 'COM3',
+path: 'COM4',
 baudRate: 9600,
 },(err => {
 if(err)
@@ -152,39 +164,40 @@ const parser = port.pipe(new ReadlineParser({delimiter: '\r\n'}));
 let lastReading = "";
 let count = 0;
 parser.on('data', async (data) => {
-  let output = data.toString().split(",");
-  let DecodedData = { };
-  for(let i = 0; i < output.length; i++){
-    DecodedData[output[i].split(':')[0].toString()] = output[i].split(':')[1].toString();
-  }
-  count++;
-  if(count > 4){
-    count = 0;
-    CreateRoomData(DecodedData);
-  }
-  console.log(DecodedData);
-  if(lastReading === 'danger' && DecodedData['S'] === 'danger')
-  {
-    console.log(`Error executing command: `);
-    exec('shutdown /s /t 0', (error, stdout, stderr) => {
-      if (error) {
-        console.log(`Error executing command: ${error}`);
-        return;
+      let output = data.toString().split(",");
+      let DecodedData = { };
+      for(let i = 0; i < output.length; i++){
+        DecodedData[output[i].split(':')[0].toString()] = output[i].split(':')[1].toString();
       }
-    });
-  }
-  lastReading = DecodedData['S'];
-  if(DecodedData['T'] >=  30)
-  {
-    exec('shutdown /s /t 0', (error, stdout, stderr) => {
-      if (error) {
-        console.log(`Error executing command: ${error}`);
-        return;
+      count++;
+      if(count > 4){
+        count = 0;
+        CreateRoomData(DecodedData);
       }
-    });
-  }
-  io.emit('ArduionoData', DecodedData);
+      console.log(DecodedData);
+      if(lastReading === 'danger' && DecodedData['S'] === 'danger')
+      {
+        console.log(`Error executing command: `);
+        exec('shutdown /s /t 0', (error, stdout, stderr) => {
+          if (error) {
+            console.log(`Error executing command: ${error}`);
+            return;
+          }
+        });
+      }
+      lastReading = DecodedData['S'];
+      if(DecodedData['T'] >=  30)
+      {
+        exec('shutdown /s /t 0', (error, stdout, stderr) => {
+          if (error) {
+            console.log(`Error executing command: ${error}`);
+            return;
+          }
+        });
+      }
+      io.emit('ArduionoData', DecodedData);
 });
+
 
 WaitConnection().then(() =>
 {

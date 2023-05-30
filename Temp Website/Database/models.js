@@ -1,28 +1,29 @@
 const { Sequelize, DataTypes, Op } = require('sequelize');
 
-// const sequelize = new Sequelize('kurami_', 'kurami_ ', '', {
-//   host: 'sql.bsite.net/MSSQL2016',
-//   dialect: 'mssql',
-//   port: '',
-//   database: 'kurami_',
-//   logging: false,
-//   dialectOptions: {
-//     options: {
-//       encrypt: false // If you are connecting to a server with SSL encryption
-//     }
-//   }
-// });
+// 'sql.bsite.net/MSSQL2016'
 
-const sequelize = new Sequelize('haaaaaaaaaaaaaa', 'haaaaaaaaaaaaaa', 'Ts0BHEtj_~SF', {
+const sequelize = new Sequelize('ArduinoToNodeJsWebsite', 'NicolaJ_SQLLogin_1', 'mrubs9xwhz', {
+  host: 'ArduinoToNodeJsWebsite.mssql.somee.com',
   dialect: 'mssql',
-  host: 'den1.mssql8.gear.host',
+  database: 'ArduinoToNodeJsWebsite',
   logging: false,
   dialectOptions: {
-    options: {      
-      server: "MSSQL8"
+    options: {
+      encrypt: false // If you are connecting to a server with SSL encryption
     }
   }
-})
+});
+
+// const sequelize = new Sequelize('haaaaaaaaaaaaaa', 'haaaaaaaaaaaaaa', 'Ts0BHEtj_~SF', {
+//   dialect: 'mssql',
+//   host: 'den1.mssql8.gear.host',
+//   logging: false,
+//   dialectOptions: {
+//     options: {      
+//       server: "MSSQL8"
+//     }
+//   }
+// })
 
 const User = sequelize.define('Users', {
   UserId: {

@@ -54,8 +54,15 @@ async function ValidateLogin(Username, Password, IP)
               });
             await test.save();
         } else {
-            result.Error = true;
-            result.Message = "Accaunt is logged on another device!";
+            if(ipEntity === IP)
+            {
+                return result;
+            }
+            else
+            {
+                result.Error = true;
+                result.Message = "Accaunt is logged on another device!";
+            }
         }
 
     } else {
